@@ -4,7 +4,7 @@ import { SquaresGrid } from "./components/SquaresGrid";
 import { Legend } from "./components/Legend";
 import { QuarterSubmit } from "./components/QuarterSubmit";
 import { getGameState, updateGameState, submitQuarter } from "./api/gameState";
-import patriotsLogo from "figma:asset/30f90a11621ee6592b57efec61f850918684c5f9.png";
+import patriotsLogo from "../assets/30f90a11621ee6592b57efec61f850918684c5f9.png";
 import { toast } from "sonner";
 import { Toaster } from "./components/ui/sonner";
 
