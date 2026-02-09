@@ -137,42 +137,42 @@ export function SquaresGrid({
 
   const getSquareClassName = (row: number, col: number): string => {
     const baseClasses = "relative h-12 border border-gray-300 flex items-center justify-center text-xs font-medium transition-all duration-300";
-    
+
     // Check if this is a quarter winner
     const isWinner = quarterWinners.some(
       (winner) =>
         PATRIOTS_DIGITS[row] === winner.patriots &&
         SEAHAWKS_DIGITS[col] === winner.seahawks
     );
-    
+    const winnerBorderClass = isWinner ? " border-4 border-green-600" : "";
+
     // Check if this is the active square
     if (row === activeRow && col === activeCol) {
-      // If it's both active AND a winner, show blue with green border
       if (isWinner) {
-        return `${baseClasses} bg-blue-500 text-white shadow-lg shadow-blue-500/50 scale-105 z-10 border-4 border-green-600`;
+        return `${baseClasses} bg-blue-500 text-white shadow-lg shadow-blue-500/50 scale-105 z-10 border-[5px] border-green-600`;
       }
       return `${baseClasses} bg-blue-500 text-white shadow-lg shadow-blue-500/50 scale-105 z-10`;
     }
-    
-    if (isWinner) {
-      return `${baseClasses} bg-green-600 text-white font-bold`;
-    }
-    
+
     // Check if this is a probability square
     const probSquare = probabilitySquares.find(ps => ps.row === row && ps.col === col);
     if (probSquare) {
       if (probSquare.type === 'pick6' || probSquare.type === 'safety') {
         const opacity = probSquare.intensity === 2 ? 'from-orange-300 to-orange-400' : 'from-orange-200 to-orange-300';
-        return `${baseClasses} bg-gradient-to-br ${opacity} text-gray-800`;
+        return `${baseClasses} bg-gradient-to-br ${opacity} text-gray-800${winnerBorderClass}`;
       } else {
         // Stronger yellow for most likely scores (+3, +7), lighter for less likely (+6, +8)
         const opacity = probSquare.intensity === 3 ? 'from-yellow-400 to-yellow-500' : 
                        probSquare.intensity === 2 ? 'from-yellow-300 to-yellow-400' : 
                        'from-yellow-50 to-yellow-100';
-        return `${baseClasses} bg-gradient-to-br ${opacity} text-gray-800`;
+        return `${baseClasses} bg-gradient-to-br ${opacity} text-gray-800${winnerBorderClass}`;
       }
     }
-    
+
+    if (isWinner) {
+      return `${baseClasses} bg-white text-gray-900 font-bold${winnerBorderClass}`;
+    }
+
     return `${baseClasses} bg-gray-50 hover:bg-gray-100 text-gray-700`;
   };
 
@@ -224,30 +224,30 @@ export function SquaresGrid({
     const patriotsDigit = PATRIOTS_DIGITS[row];
     const seahawksDigit = SEAHAWKS_DIGITS[col];
     
-    let status = "";
+    const statusLines: string[] = [];
     if (row === activeRow && col === activeCol) {
-      status = "🎯 CURRENT SCORE";
+      statusLines.push("🎯 CURRENT SCORE");
     } else {
       const isWinner = quarterWinners.some(
         (winner) => winner.patriots === patriotsDigit && winner.seahawks === seahawksDigit
       );
       if (isWinner) {
         const quarters = getWinnerQuarters(row, col).join(', ');
-        status = `🏆 QUARTER WINNER (${quarters})`;
-      } else {
-        const probSquare = probabilitySquares.find(ps => ps.row === row && ps.col === col);
-        if (probSquare) {
-          if (probSquare.type === 'fg') status = "⚡ Field Goal (3 pts)";
-          else if (probSquare.type === 'td') status = "⚡ Touchdown + XP (7 pts)";
-          else if (probSquare.type === 'td-missed') status = "⚡ TD no XP (6 pts)";
-          else if (probSquare.type === 'td-2pt') status = "⚡ TD + 2pt (8 pts)";
-          else if (probSquare.type === 'pick6') status = "🛡️ Pick Six (7 pts)";
-          else if (probSquare.type === 'safety') status = "🛡️ Safety (2 pts)";
-        }
+        statusLines.push(`🏆 QUARTER WINNER (${quarters})`);
+      }
+
+      const probSquare = probabilitySquares.find(ps => ps.row === row && ps.col === col);
+      if (probSquare) {
+        if (probSquare.type === 'fg') statusLines.push("⚡ Field Goal (3 pts)");
+        else if (probSquare.type === 'td') statusLines.push("⚡ Touchdown + XP (7 pts)");
+        else if (probSquare.type === 'td-missed') statusLines.push("⚡ TD no XP (6 pts)");
+        else if (probSquare.type === 'td-2pt') statusLines.push("⚡ TD + 2pt (8 pts)");
+        else if (probSquare.type === 'pick6') statusLines.push("🛡️ Pick Six (7 pts)");
+        else if (probSquare.type === 'safety') statusLines.push("🛡️ Safety (2 pts)");
       }
     }
-    
-    return `${playerName}\nSquare: (${patriotsDigit}, ${seahawksDigit})\nPotential: $200${status ? '\n' + status : ''}`;
+
+    return `${playerName}\nSquare: (${patriotsDigit}, ${seahawksDigit})\nPotential: $200${statusLines.length ? '\n' + statusLines.join('\n') : ''}`;
   };
 
   return (

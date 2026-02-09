@@ -29,7 +29,7 @@ export function Legend({ possession }: LegendProps) {
           <span>Current Score Square</span>
         </div>
         <div className="flex items-center gap-3">
-          <div className="w-6 h-6 rounded bg-green-600"></div>
+          <div className="w-6 h-6 rounded border-2 border-green-600 bg-white"></div>
           <span>Quarter Winner</span>
         </div>
         <div className="flex items-center gap-3">
@@ -42,7 +42,7 @@ export function Legend({ possession }: LegendProps) {
         </div>
         <div className="flex items-center gap-3">
           <div className="w-6 h-6 rounded bg-gradient-to-br from-orange-300 to-orange-400"></div>
-          <span>Defensive Score Risk</span>
+          <span>Defensive Score Risk (+2, +7)</span>
         </div>
       </div>
     </Card>
