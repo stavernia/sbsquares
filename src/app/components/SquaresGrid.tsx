@@ -256,62 +256,73 @@ export function SquaresGrid({
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full">
             {/* Grid container */}
-            <div className="grid gap-0" style={{ gridTemplateColumns: 'auto repeat(10, 1fr)' }}>
-              {/* Top-left corner */}
-              <div className="h-12 flex items-center justify-center font-bold text-xs bg-gray-200 border border-gray-300">
-                SB LX
+            <div
+              className="inline-grid items-stretch gap-2"
+              style={{ gridTemplateColumns: "auto max-content", gridTemplateRows: "auto max-content" }}
+            >
+              <div></div>
+              <div className="flex items-center justify-center text-lg font-bold text-green-800 uppercase tracking-wide self-center">
+                Seahawks
               </div>
-              
-              {/* Seahawks header row */}
-              {SEAHAWKS_DIGITS.map((digit) => (
-                <div
-                  key={`sea-${digit}`}
-                  className="h-12 flex items-center justify-center font-bold text-white bg-green-700 border border-gray-300"
-                >
-                  {digit}
+              <div className="flex h-full items-center justify-center text-lg font-bold text-blue-800 uppercase tracking-wide [writing-mode:vertical-rl] -rotate-180 self-stretch">
+                Patriots
+              </div>
+              <div className="grid gap-0" style={{ gridTemplateColumns: 'auto repeat(10, 1fr)' }}>
+                {/* Top-left corner */}
+                <div className="h-12 flex items-center justify-center font-bold text-xs bg-gray-200 border border-gray-300">
+                  SB LX
                 </div>
-              ))}
-              
-              {/* Grid rows */}
-              {PATRIOTS_DIGITS.map((patriotsDigit, row) => (
-                <div key={`row-${row}`} className="contents">
-                  {/* Patriots header column */}
-                  <div className="h-12 flex items-center justify-center font-bold text-white bg-blue-700 border border-gray-300">
-                    {patriotsDigit}
+                
+                {/* Seahawks header row */}
+                {SEAHAWKS_DIGITS.map((digit) => (
+                  <div
+                    key={`sea-${digit}`}
+                    className="h-12 flex items-center justify-center font-bold text-white bg-green-700 border border-gray-300"
+                  >
+                    {digit}
                   </div>
-                  
-                  {/* Square cells */}
-                  {SEAHAWKS_DIGITS.map((seahawksDigit, col) => {
-                    const winnerQuarters = getWinnerQuarters(row, col);
-                    const hasWinnerBadge = winnerQuarters.length > 0;
+                ))}
+                
+                {/* Grid rows */}
+                {PATRIOTS_DIGITS.map((patriotsDigit, row) => (
+                  <div key={`row-${row}`} className="contents">
+                    {/* Patriots header column */}
+                    <div className="h-12 flex items-center justify-center font-bold text-white bg-blue-700 border border-gray-300">
+                      {patriotsDigit}
+                    </div>
                     
-                    return (
-                      <Tooltip key={`${row}-${col}`}>
-                        <TooltipTrigger asChild>
-                          <div
-                            className={getSquareClassName(row, col)}
-                            onMouseEnter={() => setHoveredSquare({ row, col })}
-                            onMouseLeave={() => setHoveredSquare(null)}
-                          >
-                            <span>{getPlayerName(row, col)}</span>
-                            {winnerQuarters.map((quarter) => (
-                              <div 
-                                key={quarter}
-                                className={`absolute bg-green-700 text-white text-[9px] font-bold px-1 py-0.5 rounded shadow-sm ${getQuarterBadgePosition(quarter)}`}
-                              >
-                                {quarter === 'Final' ? 'F' : quarter}
-                              </div>
-                            ))}
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-xs whitespace-pre-line">
-                          {getTooltipContent(row, col)}
-                        </TooltipContent>
-                      </Tooltip>
-                    );
-                  })}
-                </div>
-              ))}
+                    {/* Square cells */}
+                    {SEAHAWKS_DIGITS.map((seahawksDigit, col) => {
+                      const winnerQuarters = getWinnerQuarters(row, col);
+                      
+                      return (
+                        <Tooltip key={`${row}-${col}`}>
+                          <TooltipTrigger asChild>
+                            <div
+                              className={getSquareClassName(row, col)}
+                              onMouseEnter={() => setHoveredSquare({ row, col })}
+                              onMouseLeave={() => setHoveredSquare(null)}
+                            >
+                              <span>{getPlayerName(row, col)}</span>
+                              {winnerQuarters.map((quarter) => (
+                                <div 
+                                  key={quarter}
+                                  className={`absolute bg-green-700 text-white text-[9px] font-bold px-1 py-0.5 rounded shadow-sm ${getQuarterBadgePosition(quarter)}`}
+                                >
+                                  {quarter === 'Final' ? 'F' : quarter}
+                                </div>
+                              ))}
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs whitespace-pre-line">
+                            {getTooltipContent(row, col)}
+                          </TooltipContent>
+                        </Tooltip>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
             </div>
             
             {/* Team labels */}
