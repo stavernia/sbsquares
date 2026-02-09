@@ -1,8 +1,27 @@
 import { Card } from "./ui/card";
 
-export function Legend() {
+interface LegendProps {
+  possession: "patriots" | "seahawks";
+}
+
+export function Legend({ possession }: LegendProps) {
+  const possessionLabel = possession === "patriots" ? "Patriots" : "Seahawks";
+  const possessionColorClass =
+    possession === "patriots"
+      ? "bg-blue-700 text-blue-50 ring-blue-200"
+      : "bg-green-700 text-green-50 ring-green-200";
+
   return (
     <Card className="p-4">
+      <div className="mb-4 flex items-center justify-between rounded-lg border bg-muted/40 px-3 py-2 text-sm">
+        <span className="text-muted-foreground">Possession</span>
+        <span
+          className={`inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${possessionColorClass}`}
+        >
+          <span className="h-2 w-2 rounded-full bg-white/80"></span>
+          {possessionLabel}
+        </span>
+      </div>
       <h3 className="text-sm font-semibold mb-3">LEGEND</h3>
       <div className="space-y-2 text-sm">
         <div className="flex items-center gap-3">
